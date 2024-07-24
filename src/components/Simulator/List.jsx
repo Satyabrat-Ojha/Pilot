@@ -3,7 +3,7 @@ import { FaRegCircleXmark } from "react-icons/fa6";
 
 const List = ({ coordinates, status }) => {
   return (
-    <div className="w-[220px] bg-gray-50">
+    <div className="w-[220px]">
       <div className="flex justify-center items-center p-3 bg-gray-200">
         Selected Points
       </div>
@@ -13,7 +13,7 @@ const List = ({ coordinates, status }) => {
           .map(({ x, y, select, setSelect }, index) => (
             <div
               key={index}
-              className="p-2 border-b flex justify-between items-center"
+              className="p-2 border-b flex justify-between items-center bg-gray-50"
             >
               <p>{`(${x}, ${y})`}</p>
               <p

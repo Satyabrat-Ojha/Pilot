@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import Plane from "./Plane";
 import List from "./List";
 import { MdDeleteOutline } from "react-icons/md";
@@ -45,15 +46,38 @@ const Simulator = () => {
     ],
   ];
 
-  const simulate = () => {
+  const simulate = async () => {
     clearSimulation();
     setFinalDuration(duration);
     setFinalSpeed(speed);
     setStatus("loading");
-    setTimeout(() => {
-      setTrajectories(sampleTrajectories);
+
+    const listOfCoordinates = [];
+    coordinates.forEach(({ x, y, select }) => {
+      if (select) listOfCoordinates.push([x, y]);
+    });
+
+    // API call to fetch trajectories
+    try {
+      const response = await fetch("solve", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coordinates: listOfCoordinates }),
+      });
+
+      const data = await response.json();
+      const { new_coordinates } = data;
+      const newTrajectories = [];
+      newTrajectories.push(new_coordinates);
+      console.log("SIMULATE_SUCCESS", newTrajectories);
+      setTrajectories(newTrajectories);
       setStatus("ready");
-    }, 1000);
+    } catch (error) {
+      console.log("SIMULATE_ERROR", error);
+      setStatus("idle");
+    }
   };
 
   const clearSimulation = () => {
