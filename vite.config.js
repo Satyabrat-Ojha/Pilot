@@ -13,6 +13,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/solve/, "/solve"),
       },
     },
-    cors: false,
   },
 });
