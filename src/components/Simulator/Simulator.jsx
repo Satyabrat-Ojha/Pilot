@@ -59,7 +59,7 @@ const Simulator = () => {
 
     // API call to fetch trajectories
     try {
-      const response = await fetch("/solve", {
+      const response = await fetch("https://tour-finder.onrender.com/solve", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
