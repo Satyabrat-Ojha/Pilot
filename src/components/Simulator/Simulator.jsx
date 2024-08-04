@@ -64,7 +64,11 @@ const Simulator = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ coordinates: listOfCoordinates }),
+        body: JSON.stringify({
+          coordinates: listOfCoordinates,
+          time: finalDurationduration * 60,
+          speed: (finalSpeed * 5) / 18,
+        }),
       });
 
       const data = await response.json();
