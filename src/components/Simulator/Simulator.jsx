@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import Plane from "./Plane";
 import List from "./List";
 import { MdDeleteOutline } from "react-icons/md";
@@ -16,10 +15,9 @@ const Simulator = () => {
   // idle - taking inputs, loading - fetching trajectories, ready - ready to simulate, running - simulation in progress
   const [status, setStatus] = useState("idle");
   const [duration, setDuration] = useState(20);
-  const [finalDuration, setFinalDuration] = useState(20);
   const [speed, setSpeed] = useState(6);
-  const [finalSpeed, setFinalSpeed] = useState(6);
   const [trajectories, setTrajectories] = useState([]);
+  const [droneCount, setDroneCount] = useState(0);
 
   const coordinates = [];
   for (let x = -1000; x <= 1000; x += 50) {
@@ -47,36 +45,41 @@ const Simulator = () => {
   ];
 
   const simulate = async () => {
-    clearSimulation();
-    setFinalDuration(duration);
-    setFinalSpeed(speed);
-    setStatus("loading");
-
-    const listOfCoordinates = [];
-    coordinates.forEach(({ x, y, select }) => {
-      if (select) listOfCoordinates.push([x, y]);
-    });
-
     // API call to fetch trajectories
     try {
-      const response = await fetch("https://tour-finder.onrender.com/solve", {
+      clearSimulation();
+      setStatus("loading");
+
+      const listOfCoordinates = [];
+      coordinates.forEach(({ x, y, select }) => {
+        if (select) listOfCoordinates.push([x, y]);
+      });
+      if (listOfCoordinates.length == 0) {
+        setStatus("idle");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:5000/solve", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           coordinates: listOfCoordinates,
-          time: finalDurationduration * 60,
-          speed: (finalSpeed * 5) / 18,
+          time: duration * 60,
+          speed: (speed * 5) / 18,
         }),
       });
 
       const data = await response.json();
-      const { new_coordinates } = data;
-      const newTrajectories = [];
-      newTrajectories.push(new_coordinates);
-      console.log("SIMULATE_SUCCESS", newTrajectories);
-      setTrajectories(newTrajectories);
+      const { paths, vehicles } = data;
+      // console.log("SIMULATE_SUCCESS", paths, vehicles);
+      setDroneCount(vehicles);
+      if (vehicles == -1) {
+        setStatus("idle");
+        return;
+      }
+      setTrajectories(paths);
       setStatus("ready");
     } catch (error) {
       console.log("SIMULATE_ERROR", error);
@@ -102,7 +105,7 @@ const Simulator = () => {
       <Plane
         coordinates={coordinates}
         trajectories={trajectories}
-        speed={finalSpeed}
+        speed={speed}
         status={status}
       />
       <List coordinates={coordinates} status={status} />
@@ -192,7 +195,7 @@ const Simulator = () => {
           <div className="border flex flex-col">
             <div className="bg-gray-200 py-3 text-center">Number of drones</div>
             <div className="text-center bg-gray-50 text-lg py-1">
-              {trajectories.length ? trajectories.length : "-"}
+              {droneCount != -1 ? droneCount : "N/A"}
             </div>
           </div>
         </div>

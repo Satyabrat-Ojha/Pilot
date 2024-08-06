@@ -2,8 +2,13 @@ import React from "react";
 import { Axes, HorizontalAxis, VerticalAxis } from "./Axes";
 import Point from "./Point";
 import Drone from "./Drone";
+import colour from "./colour";
 
 const Plane = ({ coordinates, trajectories, speed, status }) => {
+  const changeColour = (x, y, n) => {
+    // todo: change the colour of the point
+  };
+
   return (
     <div className="h-[600px] w-[600px] rounded-[50%] bg-[rgb(130,130,130)] relative overflow-hidden flex justify-center items-center">
       <Axes />
@@ -39,7 +44,8 @@ const Plane = ({ coordinates, trajectories, speed, status }) => {
         {trajectories.map((trajectory, index) => (
           <Drone
             trajectory={trajectory}
-            key={index}
+            key={index + 1}
+            index={index + 1}
             speed={speed}
             status={status}
           />

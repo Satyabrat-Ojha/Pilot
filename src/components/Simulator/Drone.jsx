@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PiDroneDuotone } from "react-icons/pi";
+import colour from "./colour";
 
-const Drone = ({ trajectory, speed, status }) => {
+const Drone = ({ trajectory, speed, status, index }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [time, setTime] = useState(0);
   const timeouts = useRef([]);
@@ -55,9 +56,9 @@ const Drone = ({ trajectory, speed, status }) => {
   };
 
   const stop = () => {
+    setTime(0);
     timeouts.current.forEach((timeout) => clearTimeout(timeout));
     timeouts.current = [];
-    setTime(0);
     setPosition({ x: 0, y: 0 });
   };
 
@@ -68,6 +69,7 @@ const Drone = ({ trajectory, speed, status }) => {
         transition: `left ${time}ms linear, top ${time}ms linear`,
         left: `${position.x}px`,
         top: `${position.y}px`,
+        color: colour(index),
       }}
     >
       <PiDroneDuotone />

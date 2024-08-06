@@ -1,4 +1,5 @@
 import React from "react";
+import colour from "./colour";
 
 const Point = ({ x, y, select, setSelect, status }) => {
   // x and y are in the range of [0, 1000m]
@@ -10,9 +11,11 @@ const Point = ({ x, y, select, setSelect, status }) => {
       <div
         className={`${
           select ? "opacity-100" : "hover:opacity-30"
-        } absolute w-[10px] h-[10px] z-20 opacity-0 rounded-full flex justify-center items-center bg-black`}
+        } absolute w-[10px] h-[10px] z-20 opacity-0 rounded-full flex justify-center items-center ${
+          select > 0 ? colour(select) : "bg-black"
+        }`}
         style={{ transform: `translate(${X}px, ${Y}px)` }}
-        onClick={() => status === "idle" && setSelect(!select)}
+        onClick={() => status === "idle" && setSelect(select == 0 ? -1 : 0)}
       />
     </>
   );
