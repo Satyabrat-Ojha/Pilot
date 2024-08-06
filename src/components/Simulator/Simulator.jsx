@@ -87,17 +87,31 @@ const Simulator = () => {
     }
   };
 
+  const resetCoordinates = () => {
+    for (let i = 0; i < coordinates.length; i++) {
+      if (coordinates[i].select !== 0) {
+        coordinates[i].setSelect(-1);
+      }
+    }
+  };
+
   const clearSimulation = () => {
     setTrajectories([]);
+    resetCoordinates();
     setStatus("idle");
   };
 
   const run = () => {
+    resetCoordinates();
     setStatus("running");
   };
 
   const stop = () => {
+    const temp = trajectories;
+    setTrajectories([]);
+    setTrajectories(temp);
     setStatus("ready");
+    resetCoordinates();
   };
 
   return (

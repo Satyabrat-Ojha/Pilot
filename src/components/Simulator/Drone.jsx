@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { PiDroneDuotone } from "react-icons/pi";
 import colour from "./colour";
 
-const Drone = ({ trajectory, speed, status, index }) => {
+const Drone = ({ trajectory, speed, status, index, changeColour }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [time, setTime] = useState(0);
   const timeouts = useRef([]);
@@ -48,6 +48,9 @@ const Drone = ({ trajectory, speed, status, index }) => {
 
     transitions.forEach((transition) => {
       const timeout = setTimeout(() => {
+        setTimeout(() => {
+          changeColour(transition.x, transition.y, index);
+        }, transition.time);
         setTime(transition.time);
         setPosition({ x: transition.x, y: transition.y });
       }, transition.startTime);
@@ -63,17 +66,28 @@ const Drone = ({ trajectory, speed, status, index }) => {
   };
 
   return (
-    <div
-      className="absolute text-gray-800 z-[999] text-xl"
-      style={{
-        transition: `left ${time}ms linear, top ${time}ms linear`,
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        color: colour(index),
-      }}
-    >
-      <PiDroneDuotone />
-    </div>
+    <>
+      {status === "running" ? (
+        <div
+          className="absolute text-gray-800 z-[999] text-xl"
+          style={{
+            transition: `left ${time}ms linear, top ${time}ms linear`,
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            color: colour(index),
+          }}
+        >
+          <PiDroneDuotone />
+        </div>
+      ) : (
+        <div
+          className="absolute text-gray-800 z-[999] text-xl"
+          style={{ color: colour(index) }}
+        >
+          <PiDroneDuotone />
+        </div>
+      )}
+    </>
   );
 };
 

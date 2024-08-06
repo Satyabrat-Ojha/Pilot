@@ -18,7 +18,9 @@ const List = ({ coordinates, status }) => {
               <p>{`(${x}, ${y})`}</p>
               <p
                 className="text-gray-400 hover:text-gray-500"
-                onClick={() => status === "idle" && setSelect(!select)}
+                onClick={() =>
+                  status === "idle" && setSelect(select === 0 ? -1 : 0)
+                }
               >
                 <FaRegCircleXmark />
               </p>

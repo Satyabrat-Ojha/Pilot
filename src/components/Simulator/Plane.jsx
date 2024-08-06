@@ -5,8 +5,17 @@ import Drone from "./Drone";
 import colour from "./colour";
 
 const Plane = ({ coordinates, trajectories, speed, status }) => {
-  const changeColour = (x, y, n) => {
-    // todo: change the colour of the point
+  const changeColour = (xc, yc, n) => {
+    if (xc === 0 && yc === 0 && status !== "running") return;
+
+    for (let i = 0; i < coordinates.length; i++) {
+      let x = coordinates[i].x;
+      let y = coordinates[i].y;
+      if (x * 0.3 === xc && y * -0.3 === yc) {
+        coordinates[i].setSelect(n);
+        break;
+      }
+    }
   };
 
   return (
@@ -48,6 +57,7 @@ const Plane = ({ coordinates, trajectories, speed, status }) => {
             index={index + 1}
             speed={speed}
             status={status}
+            changeColour={changeColour}
           />
         ))}
       </div>
