@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HiMiniSquares2X2 } from "react-icons/hi2";
-import { IoRocketSharp } from "react-icons/io5";
 import ResponsiveMenu from "./ResponsiveMenu";
+import logo from "../../assets/drone.png";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -9,10 +9,10 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-gray-500 text-white py-3 z-50 relative">
+      <nav className="bg-[rgb(139,143,153)] text-white py-3 z-50 relative">
         <div className="container flex justify-center items-center">
           <h1 className="text-3xl font-semibold flex justify-center items-center gap-2">
-            <IoRocketSharp />
+            <img src={logo} alt="logo" className="w-10 h-10" />
             Pilot
           </h1>
           <p className="absolute text-gray-300 right-[10%] bottom-0 p-1 hover:text-yellow-500 cursor-pointer">
